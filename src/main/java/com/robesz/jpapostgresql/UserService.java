@@ -1,5 +1,6 @@
 package com.robesz.jpapostgresql;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,7 @@ public class UserService {
     public void createUser(UserDTO userDTO){
 
         User user = new User();
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setPhoneNumbers(userDTO.getPhoneNumbers());
-
+        BeanUtils.copyProperties(userDTO,user);
         userRepository.save(user);
     }
 
@@ -29,9 +27,7 @@ public class UserService {
         List<UserDTO> userDTOS = new ArrayList<>();
         userRepository.findAll().forEach(user -> {
             UserDTO userDTO = new UserDTO();
-            userDTO.setFirstName(user.getFirstName());
-            userDTO.setLastName(user.getLastName());
-            userDTO.setPhoneNumbers(user.getPhoneNumbers());
+            BeanUtils.copyProperties(user, userDTO);
             userDTOS.add(userDTO);
         });
         return userDTOS;
